@@ -157,6 +157,7 @@ then Lodash/Underscore is the better option.*
 1. [_.assign](#_assign)
 1. [_.extend](#_extend)
 1. [_.get](#_get)
+1. [_.isEqual](#_isEqual)
 1. [_.keys](#_keys)
 1. [_.omit](#_omit)
 1. [_.pick](#_pick)
@@ -2052,6 +2053,75 @@ Gets the value at path of object.
   49.0 ✔  | 14.0 ✔ |  41.0 ✔ |  ✖  |  41.0 ✔ |  8.0 ✔ |
 
   **[⬆ back to top](#quick-links)**
+
+### _.isEqual
+
+Checks if two objects are equal.
+
+  ```js
+  var arr = [{ a: {a1: [1,2,3] }, b: { b1: [2,3,4] } }]
+  var otherAtrr = [{ a: {a1: [1,2,3] }, b: { b1: [2,3,4] } }]
+  _.isEqual(array, otherArray)
+  output: true
+
+  // Native
+  function isEqual(first, second) {
+    if (first === undefined || second === undefined) {
+      return false;
+    }
+    const firstType = first.constructor.name;
+    const secondType = second.constructor.name;
+    if (firstType !== secondType) {
+      return false;
+    }
+    if (firstType === 'Array') {
+      if (first.length !== second.length) {
+        return false;
+      }
+      let equal = true;
+      for (let i = 0; i < first.length; i++) {
+        if (first[i] !== second[i]) {
+          equal = false;
+          break;
+        }
+      }
+      return equal;
+    }
+    if (firstType === 'Object') {
+      let equal = true;
+      const fKeys = Object.keys(first);
+      const sKeys = Object.keys(second);
+      if (fKeys.length !== sKeys.length) {
+        return false;
+      }
+      for (let i = 0; i < fKeys.length; i++) {
+        if (first[fKeys[i]] && second[fKeys[i]]) {
+          if (first[fKeys[i]].constructor.name === 'Array' || first[fKeys[i]].constructor.name === 'Object') {
+            equal = isEqual(first[fKeys[i]], second[fKeys[i]]);
+          } else if (first[fKeys[i]] !== second[fKeys[i]]) {
+            equal = false;
+            break;
+          }
+        } else {
+          equal = false;
+          break;
+        }
+      }
+      return equal;
+    }
+    return first === second;
+  }
+  isEqual(arr, otherArr)
+  output: true
+  ```
+
+#### Browser Support for `Object.keys()`
+
+![Chrome][chrome-image] | ![Edge][edge-image] | ![Firefox][firefox-image] | ![IE][ie-image] | ![Opera][opera-image] | ![Safari][safari-image]
+:-: | :-: | :-: | :-: | :-: | :-: |
+  5.0 ✔  | ✔ | 4.0 ✔ |  9.0 ✔ |  12.0 ✔ |  5.0 ✔ |
+
+**[⬆ back to top](#quick-links)**
 
 ### _.keys
 
